@@ -21,7 +21,48 @@ describe 'Top page' do
     end
   end
 
-  context 'アカウントを正しく登録した場合' do
+  context '登録済みメールアドレスと、誤ったアカウント情報を送信した場合、' do
+    let(:newcomer) { Account.first! }
+    include_context :send_account_form_with, 'email@email.com', 'password'
+    include_context :send_account_form_with, 'email@email.com', 'passwordmiss'
+    after { Account.destroy_all }
+
+    it 'アカウントは増えない' do
+      expect(Account.count).to be 1
+    end
+
+    it 'トップページへ移動する' do
+      expect(current_path).to eq '/'
+    end
+
+    it 'すでにログインしているのでは？と表示'
+    it 'ログインに失敗したと表示'
+  end
+
+  context 'すでにあるメールアドレスと、正しいパスワードを送信した場合' do
+    let(:newcomer) { Account.first! }
+    include_context :send_account_form_with, 'email@email.com', 'password'
+    include_context :send_account_form_with, 'email@email.com', 'password'
+    after { Account.destroy_all }
+
+    it 'アカウントは１件' do
+      expect(Account.count).to be 1
+    end
+
+    it 'ダッシュボードへ移動する' do
+      expect(current_path).to eq "/accounts/#{newcomer.id}"
+    end
+
+    it 'ログインして、メールアドレスが表示されている。' do
+      expect(page).to have_css '#account', text: 'email@email.com'
+    end
+
+    it 'ログイン成功したと表示'
+  end
+
+  context '新しいメールアドレスと、形式が間違っている情報を送信した場合'
+
+  context '新しいメールアドレスと、形式が正しい情報を送信した場合' do
     let(:newcomer) { Account.first! }
     include_context :send_account_form_with, 'email@email.com', 'password'
     after { Account.destroy_all }
@@ -39,5 +80,12 @@ describe 'Top page' do
     it 'ダッシュボードへ移動する' do
       expect(current_path).to eq "/accounts/#{newcomer.id}"
     end
+
+    it 'ログインして、メールアドレスが表示されている。' do
+      expect(page).to have_css '#account', text: 'email@email.com'
+    end
+
+    it '登録成功したと表示'
+    it 'ログイン成功したと表示'
   end
 end

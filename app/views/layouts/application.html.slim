@@ -26,6 +26,12 @@ html
           ul.nav.nav-pills.pull-right
             li role="presentation"
               a#toTop href="/" Top
+            - if login?
+              li.active#account role="presentation"
+                a href="#"
+                  span.glyphicon.glyphicon-user
+                  | &nbsp;
+                  | #{loggedin.email}
     .container
       == yield
     .footer

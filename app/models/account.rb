@@ -21,4 +21,12 @@ class Account < ActiveRecord::Base
            -> { where type: :trainee },
            through: :pair,
            primary_key: :trainer_id
+
+  # ----------------------------------------------------------------------------
+  # 独自の処理
+
+  def same?(other)
+    email == other.email &&
+    password == other.password
+  end
 end
