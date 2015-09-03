@@ -1,6 +1,7 @@
-class CreateTrainees < ActiveRecord::Migration
+class CreateAccounts < ActiveRecord::Migration
   def change
-    create_table :trainees do |t|
+    create_table :accounts do |t|
+      t.integer :type
       t.string :email
       t.string :password
       t.string :name

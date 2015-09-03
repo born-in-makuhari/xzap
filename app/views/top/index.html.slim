@@ -7,8 +7,7 @@
       hr
   .row
     .col-lg-6.col-lg-offset-3.col-xs-12.text-center
-      = form_tag '/account' do
-        = text_field :email, { placeholder: 'メールアドレス' }, { 'class' => 'form-control input-lg' }
-        = password_field :password, { placeholder: 'パスワード' }, { 'class' => 'form-control input-lg' }
-        = submit_tag '登録 または ログイン', 'class' => 'btn btn-primary btn-lg btn-block'
-
+      = form_for @account do |f|
+        = f.text_field :email, placeholder: 'メールアドレス', class: 'form-control input-lg'
+        = f.password_field :password, placeholder: 'パスワード', class: 'form-control input-lg'
+        = f.submit '登録 または ログイン', class: 'btn btn-primary btn-lg btn-block'
