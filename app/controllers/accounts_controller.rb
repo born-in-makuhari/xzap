@@ -47,8 +47,11 @@ class AccountsController < ApplicationController
     if account.save
       # 登録成功したらログイン
       session[:account] = account.id
+      message 'shared/register_success'
+      message 'shared/login_success'
       redirect_to account_path account
     else
+      message 'shared/register_error'
       redirect_to root_path, flash: { account: account }
     end
   end
@@ -56,8 +59,10 @@ class AccountsController < ApplicationController
   def create_as_login(account, already)
     if account.same? already
       session[:account] = already.id
+      message 'shared/login_success'
       redirect_to account_path already
     else
+      message 'shared/login_error'
       redirect_to root_path, flash: { account: account }
     end
   end

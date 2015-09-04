@@ -1,4 +1,7 @@
 .row
   .col-lg-12.text-center
     h3.text-muted ダッシュボード
-    p hogehoge
+= render 'shared/messages'
+.row
+  .col-xs-12
+    p = @account.email

@@ -35,8 +35,9 @@ describe 'Top page' do
       expect(current_path).to eq '/'
     end
 
-    it 'すでにログインしているのでは？と表示'
-    it 'ログインに失敗したと表示'
+    it 'ログインに失敗したと表示' do
+      expect(page).to have_css '#loginError'
+    end
   end
 
   context 'すでにあるメールアドレスと、正しいパスワードを送信した場合' do
@@ -57,7 +58,9 @@ describe 'Top page' do
       expect(page).to have_css '#account', text: 'email@email.com'
     end
 
-    it 'ログイン成功したと表示'
+    it 'ログイン成功したと表示' do
+      expect(page).to have_css '#loginSuccess'
+    end
   end
 
   context '新しいメールアドレスと、形式が間違っている情報を送信した場合'
@@ -85,7 +88,12 @@ describe 'Top page' do
       expect(page).to have_css '#account', text: 'email@email.com'
     end
 
-    it '登録成功したと表示'
-    it 'ログイン成功したと表示'
+    it '登録成功したと表示' do
+      expect(page).to have_css '#registerSuccess'
+    end
+
+    it 'ログイン成功したと表示' do
+      expect(page).to have_css '#loginSuccess'
+    end
   end
 end
