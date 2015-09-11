@@ -12,11 +12,13 @@ describe 'Top page' do
   end
 
   # アカウントフォームを送信する処理の共通化
-  shared_context :send_account_form_with do |email, password|
+  shared_context :send_account_form_with do |email, password, type|
+    type ||= '通常ユーザー'
     before do
       visit '/'
       fill_in 'account_email', with: email
       fill_in 'account_password', with: password
+      select type, :from => 'account_type'
       find('input[type=submit]').click
     end
   end
@@ -63,7 +65,9 @@ describe 'Top page' do
     end
   end
 
-  context '新しいメールアドレスと、形式が間違っている情報を送信した場合'
+  context '新しいメールアドレスと、形式が間違っている情報を送信した場合' do
+    it
+  end
 
   context '新しいメールアドレスと、形式が正しい情報を送信した場合' do
     let(:newcomer) { Account.first! }
@@ -78,6 +82,39 @@ describe 'Top page' do
       expect(newcomer.email).to eq 'email@email.com'
       expect(newcomer.password).to eq 'password'
       expect(newcomer.type).to eq 'trainee'
+    end
+
+    it 'ダッシュボードへ移動する' do
+      expect(current_path).to eq "/accounts/#{newcomer.id}"
+    end
+
+    it 'ログインして、メールアドレスが表示されている。' do
+      expect(page).to have_css '#account', text: 'email@email.com'
+    end
+
+    it '登録成功したと表示' do
+      expect(page).to have_css '#registerSuccess'
+    end
+
+    it 'ログイン成功したと表示' do
+      expect(page).to have_css '#loginSuccess'
+    end
+  end
+
+  context '新しいメールアドレスと、形式が正しい情報を送信した場合(トレーナーを選択)' do
+    let(:newcomer) { Account.first! }
+    include_context :send_account_form_with, 'email@email.com',
+                    'password', 'トレーナー'
+    after { Account.destroy_all }
+
+    it 'アカウントは１件' do
+      expect(Account.count).to be 1
+    end
+
+    it 'トレーナーとして登録する' do
+      expect(newcomer.email).to eq 'email@email.com'
+      expect(newcomer.password).to eq 'password'
+      expect(newcomer.type).to eq 'trainer'
     end
 
     it 'ダッシュボードへ移動する' do

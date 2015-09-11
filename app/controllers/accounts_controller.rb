@@ -43,7 +43,6 @@ class AccountsController < ApplicationController
   # 処理代行
 
   def create_as_signup(account)
-    account.type = :trainee
     if account.save
       # 登録成功したらログイン
       session[:account] = account.id
